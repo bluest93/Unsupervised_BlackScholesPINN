@@ -36,15 +36,15 @@ PINNs are neural networks that are trained not just on data, but also on the **u
 
 ```
 .
-├── black_scholes.py     # Main wrapper class for training/evaluation
-├── config.json          # All key hyperparameters
-├── data.py              # Synthetic data and collocation point generation
-├── loss.py              # PDE residual and total loss function
-├── model.py             # Neural network architecture (PINN)
-├── train.py             # Training loop
-├── utils.py             # Black-Scholes analytical solution
-├── notebook/BlackScholesModel.ipynb           # Notebook for dev or exploration
-└── README.md            # This file
+├── black_scholes.py                         # Main wrapper class for training/evaluation
+├── config.json                              # All key hyperparameters
+├── data.py                                  # Synthetic data and collocation point generation
+├── loss.py                                  # PDE residual and total loss function
+├── model.py                                 # Neural network architecture (PINN)
+├── train.py                                 # Training loop
+├── utils.py                                 # Black-Scholes analytical solution
+├── example/BlackScholesModel.ipynb          # Notebook for dev or exploration
+└── README.md                                # This file
 ```
 
 
