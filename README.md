@@ -43,7 +43,7 @@ PINNs are neural networks that are trained not just on data, but also on the **u
 ├── model.py             # Neural network architecture (PINN)
 ├── train.py             # Training loop
 ├── utils.py             # Black-Scholes analytical solution
-├── temp.ipynb           # Notebook for dev or exploration
+├── notebook/BlackScholesModel.ipynb           # Notebook for dev or exploration
 └── README.md            # This file
 ```
 
