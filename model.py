@@ -16,6 +16,10 @@ class PINN(nn.Module):
             nn.Tanh(),
             nn.Linear(64, 1)
         )
+        
 
     def forward(self, S, t):
         return self.net(torch.cat([S, t], dim=1))
+    
+
+    
