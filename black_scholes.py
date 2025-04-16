@@ -33,6 +33,10 @@ class BlackScholesPINN:
             if epoch % self.config["log_interval"] == 0:
                 print(f"Epoch {epoch} | Total: {loss.item():.6f} | Data: {loss_data.item():.6f} | PDE: {loss_pde.item():.6f}")
 
+    
+    def export(self):
+        torch.save(self.model.state_dict(), self.config.get("model_path", "model.pth"))
+
     def predict(self, S_eval, t_eval):
         with torch.no_grad():
             return self.model(S_eval, t_eval)
