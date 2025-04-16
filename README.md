@@ -60,22 +60,25 @@ pip install torch numpy matplotlib scipy
 2. Train the PINN
 
 ```bash
-python black_scholes.py
+python main.py
 ```
 
 3. Modify configuration
 
 All training and model parameters can be changed in `config.json`, including:
 
-- `K` — Strike price  
-- `T` — Time to maturity  
+- `K` — Strike price of the option  
+- `T` — Time to maturity (in years)  
 - `r` — Risk-free interest rate  
-- `sigma` — Volatility  
-- `N_data` — Number of synthetic data points  
-- `bias` — Constant bias added to synthetic labels  
-- `noise_variance` — Noise level for synthetic data  
-- `epochs` — Training iterations  
-- `min_S`, `max_S` — Range of stock prices for sampling
+- `sigma` — Volatility of the underlying asset  
+- `N_data` — Number of synthetic data points to generate  
+- `bias` — Constant value added to the synthetic labels  
+- `noise_variance` — Standard deviation of Gaussian noise added to synthetic data  
+- `min_S`, `max_S` — Range for sampling stock prices (`S`)  
+- `epochs` — Number of training iterations  
+- `lr` — Learning rate for the optimizer  
+- `log_interval` — Number of epochs between log printouts  
+- `model_path` — Path where the trained model will be saved  
 
 ---
 
