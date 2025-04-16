@@ -112,9 +112,3 @@ This project uses a Physics-Informed Neural Network (PINN) to approximate the so
 Piero Paialunga  
 PhD in Aerospace Engineering  
 Focused on AI for Physics, Finance, and Engineering Problems
-
----
-
-## License
-
-MIT License
