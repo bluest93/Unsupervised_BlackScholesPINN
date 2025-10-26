@@ -23,12 +23,11 @@ def generate_boundary_data(config):
     C_min += np.random.normal(config["bias"], config["noise_variance"], size=C_min.shape)
     # C_max = black_scholes_solution(S_max, config["K"], config["T"] - t_vals, config["r"], config["sigma"])
     # C_max += np.random.normal(config["bias"], config["noise_variance"], size=C_max.shape)
-    C_max = np.ones_like(S_max)
     
     # Concatenate both boundaries
     S_all = np.vstack([S_min, S_max])
     t_all = np.vstack([t_vals, t_vals])
-    C_all = np.vstack([C_min, C_max])
+    C_all = np.vstack([C_min, np.zeros_like(S_max)])
 
     return (
         torch.tensor(S_all, dtype=torch.float32, requires_grad=True),

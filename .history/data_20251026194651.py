@@ -20,7 +20,7 @@ def generate_boundary_data(config):
     t_vals = np.random.uniform(0, config["T"], (config["N_data"], 1))
     # Boundary values
     C_min = np.zeros_like(S_min)  # C(min_S, t) = 0
-    C_min += np.random.normal(config["bias"], config["noise_variance"], size=C_min.shape)
+    # C_min += np.random.normal(config["bias"], config["noise_variance"], size=C_min.shape)
     # C_max = black_scholes_solution(S_max, config["K"], config["T"] - t_vals, config["r"], config["sigma"])
     # C_max += np.random.normal(config["bias"], config["noise_variance"], size=C_max.shape)
     C_max = np.ones_like(S_max)

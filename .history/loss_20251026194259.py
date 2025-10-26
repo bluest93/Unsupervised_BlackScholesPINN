@@ -29,7 +29,7 @@ def total_loss(model, S_terminal, t_terminal, C_terminal,
 
     # Lower boundary: C(min_S, t) = 0
     C_pred_min = model(S_min, t_min)
-    loss_bc_min = torch.mean((C_pred_min-C_min)**2)
+    loss_bc_min = torch.mean(C_pred_min**2)
 
     # Upper boundary: ∂C/∂S (S_max, t) = 1
     S_max.requires_grad_(True)
@@ -41,8 +41,8 @@ def total_loss(model, S_terminal, t_terminal, C_terminal,
     )[0]
 
     # Neumann condition: derivative should be 1
-    loss_bc_max = torch.mean((dC_dS - C_max)**2)
-    
+    loss_bc_max = torch.mean((dC_dS - 1.0)**2)
+
     # Combine both boundary losses
     loss_boundary = loss_bc_min + loss_bc_max
 

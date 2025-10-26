@@ -18,32 +18,32 @@ def total_loss(model, S_terminal, t_terminal, C_terminal,
     C_pred_terminal = model(S_terminal, t_terminal)
     loss_terminal = torch.mean((C_pred_terminal - C_terminal)**2)
     
+
     # Boundary condition loss: C(S, 0) = 0 and C(S, T) = BS(S)
     # C_pred_boundary = model(S_boundary, t_boundary)
     # loss_boundary = torch.mean((C_pred_boundary - C_boundary)**2)
 
     N = S_boundary.shape[0] // 2
-    S_min, S_max = S_boundary[:N], S_boundary[N:]
-    t_min, t_max = t_boundary[:N], t_boundary[N:]
-    C_min, C_max = C_boundary[:N], C_boundary[N:]
-
-    # Lower boundary: C(min_S, t) = 0
-    C_pred_min = model(S_min, t_min)
-    loss_bc_min = torch.mean((C_pred_min-C_min)**2)
+    S_low, S_high = S_boundary[:N], S_boundary[N:]
+    t_low, t_high = t_boundary[:N], t_boundary[N:]
+    C_pred_low = model(S_low, t_low)
+    loss_bc_low = torch.mean(C_pred_low**2)
 
     # Upper boundary: ∂C/∂S (S_max, t) = 1
-    S_max.requires_grad_(True)
-    C_pred_max = model(S_max, t_max)
+    S_high.requires_grad_(True)
+    C_pred_high = model(S_high, t_high)
+
+    # Compute dC/dS using autograd
     dC_dS = torch.autograd.grad(
-        C_pred_max, S_max,
-        grad_outputs=torch.ones_like(C_pred_max),
+        C_pred_high, S_high,
+        grad_outputs=torch.ones_like(C_pred_high),
         create_graph=True
     )[0]
 
     # Neumann condition: derivative should be 1
-    loss_bc_max = torch.mean((dC_dS - C_max)**2)
-    
-    # Combine both boundary losses
-    loss_boundary = loss_bc_min + loss_bc_max
+    loss_bc_high = torch.mean((dC_dS - 1.0)**2)
 
-    return loss_terminal + loss_boundary + loss_pde , loss_terminal, loss_boundary, loss_pde
+    # Combine
+    loss_boundary = loss_bc_low + loss_bc_high
+
+    return 2*loss_terminal + loss_boundary + loss_pde , loss_terminal, loss_boundary, loss_pde

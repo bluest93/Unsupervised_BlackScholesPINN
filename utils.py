@@ -9,7 +9,8 @@ def black_scholes_solution(S, K, T, r, sigma):
     return S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
 
 
-def prepare_dataset(config):
+def prepare_dataset(config, time=0):
     S_eval = torch.linspace(config["min_S"], config["max_S"], 200).view(-1, 1)
-    t_eval = torch.zeros_like(S_eval)
+    t_eval = torch.ones_like(S_eval)*time
+    
     return S_eval, t_eval

@@ -11,7 +11,7 @@ class BlackScholesPINN:
 
         # Prepare data
         self.S_terminal, self.t_terminal, self.C_terminal = generate_terminal_data(config) 
-        self.S_boundary, self.t_boundary, self.C_boundary = generate_boundary_data(config)
+        self.S_boundary, self.t_boundary = generate_boundary_data(config)
         self.S_colloc, self.t_colloc = generate_collocation_points(self.config)
 
     def train(self):
@@ -24,7 +24,7 @@ class BlackScholesPINN:
             loss, loss_terminal, loss_boundary, loss_pde = total_loss(
                 self.model,
                 self.S_terminal, self.t_terminal, self.C_terminal,
-                self.S_boundary, self.t_boundary, self.C_boundary,
+                self.S_boundary, self.t_boundary,
                 self.S_colloc, self.t_colloc,
                 self.config["r"],
                 self.config["sigma"]
