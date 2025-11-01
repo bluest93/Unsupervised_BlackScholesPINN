@@ -1,61 +1,93 @@
 # Unsupervised Black-Scholes PINN
 
-This repository presents a modified implementation of Physics-Informed Neural Networks (PINNs) for solving the Black-Scholes partial differential equation, with a focus on unsupervised learning and symmetry-aware design.
+This repository extends the original Physics-Informed Neural Network (PINN) framework to solve both **European** and **American** option pricing problems under the Black–Scholes model.  
+The training is entirely **unsupervised**, relying only on the governing PDE and boundary conditions — without any labeled or synthetic data.
 
-The original codebase was developed by [Piero Paialunga](https://github.com/PieroPaialungaAI/BlackScholesPINN). This version builds upon that foundation with architectural and training refinements aimed at minimizing data dependency and enhancing compliance with the PDE structure.
+This work builds on the [original notebook](https://github.com/PieroPaialungaAI/BlackScholesPINN/blob/main/example/BlackScholesModel.ipynb) by [**Piero Paialunga**](https://github.com/PieroPaialungaAI/BlackScholesPINN), simplifying the training process, introducing free-boundary logic, and incorporating the **American option formulation** based on [**American Option Lecture Notes (Byott, 2005)**](https://empslocal.ex.ac.uk/people/staff/NPByott/teaching/FinMaths/2005/american.pdf).
 
----
 
 ## Key Modifications
 
-- **Unsupervised PINN training**  
-  No labeled data is required — the solution is learned directly from the PDE and boundary/initial conditions.
 
-- **Initial / Terminal condition**  
-  - The terminal (or initial) condition is defined as $C(S, T) = \max(S - K, 0)$.
+- **Unsupervised learning framework**  
+  No synthetic or labeled data is used. The model learns purely from the PDE residuals and boundary/terminal constraints.
 
-  - A **Neumann boundary condition** is applied at the upper boundary $S_{\max}$, enforcing $\partial C_\theta / \partial S = 1$, which is consistent with the asymptotic behavior of the option delta $N(d_1) \to 1$ for deep in-the-money call options.  
-  Additionally, the analytic Black–Scholes solution at $S_{\max}$ has been tested  
-  as an alternative upper boundary condition for comparison.
+- **European (call) and American (put) option support**  
+  A unified PINN structure handles both formulations:
+  - European call option — solved directly from the Black–Scholes PDE.
+  - American put option — solved as a **free-boundary problem** using complementarity conditions.
 
-  - The **lower boundary condition** is simply $C(S_{\min}, t) = 0$,
-  indicating that the option becomes worthless when the underlying stock price approaches zero.
+### European Market (Call Option)
 
-- **Activation functions**
-   - `GELU` is used for smooth approximation and improved gradient flow,  
-    especially near the payoff kink at $t = T$.
+The European call option is solved directly from the **Black–Scholes PDE**:
+$$
+\frac{\partial V}{\partial t}
++ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
++ rS \frac{\partial V}{\partial S}
+- rV = 0,
+$$
+with terminal condition
+$$
+V(S, T) = \max(S - K, 0).
+$$
+
+The PINN learns to satisfy this PDE and boundary behavior without any labeled data.  
+The results closely match the analytical **Black–Scholes formula**.
+
+
+### American Market (Put Option)
+
+The American put introduces a **free-boundary problem**, governed by the inequalities:
+
+$$
+\frac{\partial V}{\partial t}
++ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
++ rS \frac{\partial V}{\partial S}
+- rV \le 0, \quad
+V \ge \max(K - S, 0),
+$$
+
+where at least one condition holds as equality at every point.  
+This can be reformulated as the **linear complementarity condition**:
+
+$$
+(V - \max(K - S, 0))
+\left(
+\frac{\partial V}{\partial t}
++ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
++ rS \frac{\partial V}{\partial S}
+- rV
+\right)
+= 0.
+$$
+
+The PINN loss incorporates these relations using ReLU and $\min(\cdot)$ operators to maintain the exercise and continuation region logic.
+
+
+- **Analytical and numerical comparison**  
+  The PINN results are compared against both:
+  - The **Black–Scholes analytical solution** (European option), and  
+  - The **QuantLib benchmark** (American option).
 
 - **Notebook-only workflow**  
   Training and evaluation are performed entirely within a Jupyter notebook — no `main.py` or `train.py` scripts are used.
 
----
+
 ## Why These Changes Matter
 
-- Eliminates the need for synthetic or labeled data.
-- Aligns solely with the financial structure of the problem, relying on the governing PDE.
-- Improves generalization by enforcing known boundary behavior.
+- Eliminates the need for synthetic or labeled data.  
+- Accurately captures **free-boundary behavior** in American options.  
+- Improves PDE compliance and financial interpretability.  
+- Demonstrates the potential of PINNs for **variational inequality problems** in quantitative finance.
 
----
-
-## How to Run
-
-1. Open the notebook:
-   ```
-   BlackScholesModel.ipynb
-   ```
-
-2. Run the cells to train the PINN and visualize the results.
-
----
 
 ## Credits
 
 This project is based on the original [BlackScholesPINN repository](https://github.com/PieroPaialungaAI/BlackScholesPINN) by **Piero Paialunga**, which provided a clean and modular framework for PINN-based option pricing. All modifications here are intended for research and educational purposes.
 
----
 
 ## Author
 
 **Blues**  
-Exploring unsupervised learning, symmetry-aware modeling, and financial PDEs.
+Exploring unsupervised learning and financial PDEs.
 
