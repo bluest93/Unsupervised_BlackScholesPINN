@@ -1,13 +1,3 @@
-<script>
-window.MathJax = {
-  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-  svg: { fontCache: 'global' }
-};
-</script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script>
-
 # Unsupervised Black-Scholes PINN
 
 This repository extends the original Physics-Informed Neural Network (PINN) framework to solve both **European** and **American** option pricing problems under the Black–Scholes model.  
@@ -30,16 +20,13 @@ This work builds on the [original notebook](https://github.com/PieroPaialungaAI/
 ### European Market (Call Option)
 
 The European call option is solved directly from the **Black–Scholes PDE**:
-$$
-\frac{\partial V}{\partial t}
-+ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
-+ rS \frac{\partial V}{\partial S}
-- rV = 0,
-$$
+
+![equation](https://latex.codecogs.com/svg.image?\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV=0,)
+
 with terminal condition
-$$
-V(S, T) = \max(S - K, 0).
-$$
+
+![equation](https://latex.codecogs.com/svg.image?V(S,T)=\max(S-K,0).)
+
 
 The PINN learns to satisfy this PDE and boundary behavior without any labeled data.  
 The results closely match the analytical **Black–Scholes formula**.
@@ -49,27 +36,14 @@ The results closely match the analytical **Black–Scholes formula**.
 
 The American put introduces a **free-boundary problem**, governed by the inequalities:
 
-$$
-\frac{\partial V}{\partial t}
-+ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
-+ rS \frac{\partial V}{\partial S}
-- rV \le 0, \quad
-V \ge \max(K - S, 0),
-$$
+
+![equation](https://latex.codecogs.com/svg.image?\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\le&space;0,\quad&space;V\ge\max(K-S,0),)
+
 
 where at least one condition holds as equality at every point.  
 This can be reformulated as the **linear complementarity condition**:
 
-$$
-(V - \max(K - S, 0))
-\left(
-\frac{\partial V}{\partial t}
-+ \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
-+ rS \frac{\partial V}{\partial S}
-- rV
-\right)
-= 0.
-$$
+![equation](https://latex.codecogs.com/svg.image?(V-\max(K-S,0))\left(\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\right)=0.)
 
 The PINN loss incorporates these relations using ReLU and $\min(\cdot)$ operators to maintain the exercise and continuation region logic.
 
