@@ -1,3 +1,7 @@
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
 # Unsupervised Black-Scholes PINN
 
 This repository extends the original Physics-Informed Neural Network (PINN) framework to solve both **European** and **American** option pricing problems under the Black–Scholes model.  
