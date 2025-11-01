@@ -21,11 +21,11 @@ This work builds on the [original notebook](https://github.com/PieroPaialungaAI/
 
 The European call option is solved directly from the **Black–Scholes PDE**:
 
-![equation](https://latex.codecogs.com/svg.image?\color{black}\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV=0,)
+![equation](https://latex.codecogs.com/svg.image?\bg_black\color{White}\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV=0,)
 
 with terminal condition
 
-![equation](https://latex.codecogs.com/svg.image?\color{black}V(S,T)=\max(S-K,0).)
+![equation](https://latex.codecogs.com/svg.image?\bg_black\color{White}V(S,T)=\max(S-K,0).)
 
 
 The PINN learns to satisfy this PDE and boundary behavior without any labeled data.  
@@ -37,13 +37,13 @@ The results closely match the analytical **Black–Scholes formula**.
 The American put introduces a **free-boundary problem**, governed by the inequalities:
 
 
-![equation](https://latex.codecogs.com/svg.image?\color{black}\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\le&space;0,\quad&space;V\ge\max(K-S,0),)
+![equation](https://latex.codecogs.com/svg.image?\bg_black\color{White}\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\le&space;0,\quad&space;V\ge\max(K-S,0),)
 
 
 where at least one condition holds as equality at every point.  
 This can be reformulated as the **linear complementarity condition**:
 
-![equation](https://latex.codecogs.com/svg.image?\color{black}(V-\max(K-S,0))\left(\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\right)=0.)
+![equation](https://latex.codecogs.com/svg.image?\bg_black\color{White}(V-\max(K-S,0))\left(\frac{\partial&space;V}{\partial&space;t}&plus;\frac{1}{2}\sigma^2&space;S^2\frac{\partial^2&space;V}{\partial&space;S^2}&plus;rS\frac{\partial&space;V}{\partial&space;S}-rV\right)=0.)
 
 The PINN loss incorporates these relations using ReLU and $\min(\cdot)$ operators to maintain the exercise and continuation region logic.
 
